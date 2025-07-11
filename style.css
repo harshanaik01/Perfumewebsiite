@@ -42,6 +42,7 @@ nav ul li a {
 .search-icon {
  width: 38;
  height: 38;
+ display: flex;
 
 }
 .shop-button {
