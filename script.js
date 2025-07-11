@@ -10,27 +10,36 @@ AOS.init();
 const headers = document.querySelectorAll('.accordion-header');
 
 headers.forEach(header => {
-  header.addEventListener('click', () => {
-    const item = header.parentElement;
-    const isActive = item.classList.contains('active');
+    header.addEventListener('click', () => {
+        const item = header.parentElement; // This should be the .accordion-item
+        const content = item.querySelector('.accordion-content'); // Get the content element
+        const toggleIcon = header.querySelector('.icon'); // <--- CHANGED THIS LINE
 
-    // Close all other accordion items
-    document.querySelectorAll('.accordion-item').forEach(i => {
-      if (i !== item) { // Only close others
-        i.classList.remove('active');
-        i.querySelector('.toggle-icon').textContent = '+';
-      }
+        const isActive = item.classList.contains('active');
+
+        // Close all other accordion items
+        document.querySelectorAll('.accordion-item').forEach(i => {
+            if (i !== item) { // Only close others
+                i.classList.remove('active');
+                // Explicitly set max-height to 0 for others to ensure collapse
+                i.querySelector('.accordion-content').style.maxHeight = null; // Reset inline style
+                i.querySelector('.icon').textContent = '+'; // <--- CHANGED THIS LINE
+            }
+        });
+
+        // Toggle the clicked item
+        if (!isActive) {
+            item.classList.add('active');
+            // Set max-height to its scrollHeight to animate opening
+            content.style.maxHeight = content.scrollHeight + "px"; // Dynamic height
+            toggleIcon.textContent = '−'; // Change to minus sign
+        } else {
+            item.classList.remove('active');
+            // Set max-height to null to animate closing
+            content.style.maxHeight = null; // Reset inline style
+            toggleIcon.textContent = '+'; // Change back to plus sign
+        }
     });
-
-    // Toggle the clicked item
-    if (!isActive) {
-      item.classList.add('active');
-      header.querySelector('.toggle-icon').textContent = '−';
-    } else {
-      item.classList.remove('active');
-      header.querySelector('.toggle-icon').textContent = '+';
-    }
-  });
 });
 
 
